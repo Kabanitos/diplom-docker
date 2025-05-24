@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app-nginx
+spec:
+  selector:
+    matchLabels:
+      app: my-app-nginx
+  template:
+    metadata:
+      labels:
+        app: my-app-nginx
+    spec:
+      containers:
+        - name: my-app
+          image: cabanitos/mynginx:latest
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-nginx-service
+spec:
+  selector:
+    app: my-app-nginx
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 31080
