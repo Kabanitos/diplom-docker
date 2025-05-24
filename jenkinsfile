@@ -21,7 +21,7 @@ pipeline {
                 script {
                     try { 
                         env.GIT_TAG = sh(script: "git describe --tags --exact-match", returnStdout: true).trim()
-                        env.TAG_TRUE = true
+                        env.IS_TAG = true
                     }
                     catch (Exception e) {
                         env.IS_TAG = "false"
@@ -56,7 +56,7 @@ pipeline {
                 echo "==========Docker push================="
                 script {
                     def DOCKER_HUB_TAG = env.IS_TAG == "true" ? env.GIT_TAG : "latest"
-                    docker.image("${env.DOCKER_IMAGE}:${dockerTag}").push()
+                    docker.image("${env.IMG_NAME}:${DOCKER_HUB_TAG}").push()
                 }
                                
 
