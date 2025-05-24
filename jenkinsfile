@@ -13,6 +13,18 @@ pipeline {
         stage('Checkout') { 
             steps {
                 checkout scm
+            }
+        }
+
+
+        stage('Fetch Tags') {
+            steps {
+                sh 'git fetch --tags origin'
+            }
+        }
+        
+        stage('Detect TAG') {
+            steps{
                 script {
                     try { 
                         env.GIT_TAG = sh(script: "git describe --tags --exact-match", returnStdout: true).trim()
@@ -24,20 +36,6 @@ pipeline {
                 }
             }
         }
-
-        // stage('Detect TAG') {
-        //     steps{
-        //         script {
-        //             try { 
-        //                 env.GIT_TAG = sh(script: "git describe --tags --exact-match", returnStdout: true).trim()
-        //                 env.IS_TAG = true
-        //             }
-        //             catch (Exception e) {
-        //                 env.IS_TAG = "false"
-        //             }
-        //         }
-        //     }
-        // }
         
         stage('Docker login') {
             steps{
