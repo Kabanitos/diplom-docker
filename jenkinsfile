@@ -6,42 +6,39 @@ pipeline {
         IMG_NAME = 'cabanitos/mynginx'
         KUBECONFIGID = 'kubeconfig'
         DOCKERID = 'dockerhub-cabanitos'
-
-        // Получаем тег только если HEAD совпадает с тегом
-        GIT_TAG = sh(script: "git describe --tags --exact-match 2>/dev/null || echo ''", returnStdout: true).trim()
-        IS_TAG = GIT_TAG ? "true" : "false"
+        GIT_TAG = sh(script: "git describe --tags --exact-match", returnStdout: true).trim()
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout') { 
             steps {
-                sshagent(['github-ssh']) {  // Убедитесь, что такой ID существует в Credentials
-                    checkout scm
-                }
+                checkout scm
             }
         }
+
 
         stage('Fetch Tags') {
             steps {
                 sh 'git fetch --tags origin'
             }
         }
-
+        
         stage('Detect TAG') {
-            steps {
+            steps{
                 script {
-                    try {
+                    try { 
                         env.GIT_TAG = sh(script: "git describe --tags --exact-match", returnStdout: true).trim()
-                        env.IS_TAG = "true"
-                    } catch (Exception e) {
+                        env.IS_TAG = true
+                    }
+                    catch (Exception e) {
                         env.IS_TAG = "false"
                     }
                 }
             }
         }
-
+        
         stage('Docker login') {
-            steps {
+            steps{
                 echo "==========Docker Login================="
                 withCredentials([usernamePassword(credentialsId: "${DOCKERID}", usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh """
@@ -52,26 +49,27 @@ pipeline {
         }
 
         stage('Docker build') {
-            steps {
+            steps{
                 echo "==========Docker build================="
                 script {
                     def DOCKER_HUB_TAG = env.IS_TAG == "true" ? env.GIT_TAG : "latest"
                     docker.build("${env.IMG_NAME}:${DOCKER_HUB_TAG}")
-                }
+                } 
             }
         }
 
         stage('Docker push') {
-            steps {
+            steps{
                 echo "==========Docker push================="
                 script {
                     def DOCKER_HUB_TAG = env.IS_TAG == "true" ? env.GIT_TAG : "latest"
                     docker.image("${env.IMG_NAME}:${DOCKER_HUB_TAG}").push()
                 }
+                               
+
             }
         }
-
-        stage('Deploy to Kubernetes') {
+          stage('Deploy to Kubernetes') {
             when {
                 expression { env.IS_TAG == "true" }
             }
@@ -80,7 +78,7 @@ pipeline {
                 script {
                     withKubeConfig([credentialsId: "${KUBECONFIGID}"]) {
                         sh """
-                            kubectl apply -f deployment.yml
+                             kubectl apply -f deployment.yml
                         """
                     }
                 }
