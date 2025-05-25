@@ -1,6 +1,9 @@
 pipeline {
     agent any
-   
+    environment {
+        IMAGE_NAME = "cabanitos/mynginx"
+
+    }
     stages {
 
         stage('Checkout') {
@@ -24,16 +27,12 @@ pipeline {
                 echo " ============== start building image =================="
                 dir ('.') {
                 	sh """
-                    docker build -t cabanitos/mynginx:$latestTag . 
+                    docker build -t ${IMAGE_NAME}:${latestTag} . 
                     """
                 }
             }
         }
-        // environment {
-        //     IMAGE_NAME = "cabanitos/mynginx"
-
-        // }
-
+    
         stage('Push to Docker Registry') {
             steps {
                 withCredentials([usernamePassword(
@@ -42,8 +41,8 @@ pipeline {
                     passwordVariable: 'PASSWORD'
                 )]) {
                     sh """
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push cabanitos/mynginx:${latestTag}
+                        docker login -u \$USERNAME -p \$PASSWORD
+                        docker push ${IMAGE_NAME}:${latestTag}
                     """
                 }
             }
