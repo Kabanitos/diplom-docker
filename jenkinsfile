@@ -41,7 +41,7 @@ pipeline {
                     passwordVariable: 'PASSWORD'
                 )]) {
                     sh """
-                        docker login -u \$USERNAME -p \$PASSWORD
+                        echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin
                         docker push ${IMAGE_NAME}:${latestTag}
                     """
                 }
@@ -53,7 +53,6 @@ pipeline {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                     sh """
                         export KUBECONFIG=$KUBECONFIG
-                        # Патчим манифест или используем переменные, если нужно
                         kubectl apply -f deployment.yml
                     """
                 }
