@@ -40,7 +40,7 @@ pipeline {
         stage('Docker login') {
             steps{
                 echo "==========Docker Login================="
-                withCredentials([usernamePassword(credentialsId: '${DOCKERID}', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: '$DOCKERID', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh """
                         docker login -u \$USERNAME -p \$PASSWORD
                     """
@@ -76,7 +76,7 @@ pipeline {
             steps {
                 echo "===============Kubernetes config=============="
                 script {
-                    withKubeConfig([credentialsId: KUBECONFIGID]) {
+                    withKubeConfig([credentialsId: $KUBECONFIGID]) {
                         sh """
                              kubectl apply -f deployment.yml
                         """
