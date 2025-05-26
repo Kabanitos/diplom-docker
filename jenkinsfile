@@ -33,7 +33,7 @@ pipeline {
                     } 
                         catch (Exception e) {
                         GIT_TAG = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
-                        env.IS_TAG = "false"
+                        IS_TAG = "false"
                     }
                 }
             }
