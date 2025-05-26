@@ -14,12 +14,25 @@ pipeline {
         }
 
 
-        stage("get tag") {
-            steps {
-                script {
-                    latestTag = sh(returnStdout: true, script: "git describe --tags").trim()
+        #stage("get tag") {
+        #    steps {
+        #       script {
+        #            latestTag = sh(returnStdout: true, script: "git describe --tags").trim()
+         #       }
+          #      echo "latestTag=$latestTag"
+           # }
+        #}
+        stage("Get Git Tag") {
+          steps {
+             script {
+                 try {
+                    GIT_TAG = sh(script: "git describe --tags --exact-match", returnStdout: true).trim()
+                        echo "✅ Found exact tag: ${GIT_TAG}"
+                    } catch (Exception e) {
+                        echo "⚠️ No exact tag found, using 'latest'"
+                        env.GIT_TAG = "latest"
+                    }
                 }
-                echo "latestTag=$latestTag"
             }
         }
 
