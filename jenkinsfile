@@ -25,7 +25,6 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                echo " ============== start building image =================="
                 dir ('.') {
                 	sh """
                     docker build -t ${IMAGE_NAME}:${latestTag} . 
@@ -47,8 +46,9 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                withCredentials([file(credentialsId: "${env.KUBECONFIGID}")]) {
+                withCredentials([file(credentialsId: "${env.KUBECONFIGID}", variable: 'KUBECONFIGID')]) {
                     sh """
+                        export KUBECONFIG=$KUBECONFIGID
                         kubectl apply -f deployment.yml
                     """
                 }
