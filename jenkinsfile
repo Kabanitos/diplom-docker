@@ -23,12 +23,6 @@ pipeline {
            // }
         // }
 
-        stage('Fetch Tags') {
-            steps {
-                sh 'git fetch --tags origin'
-            }
-        }
-
 
         stage("Get Git Tag") {
           steps {
