@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         IMAGE_NAME = "cabanitos/mynginx"
+        KUBECONFIGID = "kubeconfig"
 
     }
     stages {
@@ -46,9 +47,8 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                withCredentials([file(credentialsId: 'kubeconfig')]) {
+                withCredentials([file(credentialsId: "${env.KUBECONFIGID}")]) {
                     sh """
-                        #export KUBECONFIG=$KUBECONFIG
                         kubectl apply -f deployment.yml
                     """
                 }
