@@ -35,11 +35,7 @@ pipeline {
     
         stage('Push to Docker Registry') {
             steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub-cabanitos',
-                    usernameVariable: 'USER',
-                    passwordVariable: 'PASSWORD'
-                )]) {
+                withCredentials([usernamePassword( credentialsId: 'dockerhub-cabanitos', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh """
                         docker login -u \$USERNAME -p \$PASSWORD
                         docker push ${IMAGE_NAME}:${latestTag}
