@@ -14,14 +14,14 @@ pipeline {
         }
 
 
-        #stage("get tag") {
-        #    steps {
-        #       script {
-        #            latestTag = sh(returnStdout: true, script: "git describe --tags").trim()
-         #       }
-          #      echo "latestTag=$latestTag"
-           # }
-        #}
+        //stage("get tag") {
+        //    steps {
+        //       script {
+        //            latestTag = sh(returnStdout: true, script: "git describe --tags").trim()
+         //       }
+          //      echo "latestTag=$latestTag"
+           // }
+        // }
         stage("Get Git Tag") {
           steps {
              script {
