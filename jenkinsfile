@@ -72,10 +72,10 @@ pipeline {
         // }
         stage('Deploy to Kubernetes') {
             when {
-                not
-                {
-                environment name: 'IS_TAG', value: 'true'
-             }
+                expression {
+                    env.GIT_TAG.toBoolean()
+                    }          
+                }
             }
             steps {
                 withCredentials([file(credentialsId: "${env.KUBECONFIGID}", variable: 'KUBECONFIGID')]) {
