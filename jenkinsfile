@@ -75,6 +75,9 @@ pipeline {
             when {
                 expression {
                     env.GIT_TAG.toBoolean()
+                    echo "GIT_TAG = ${env.GIT_TAG}"
+                    echo "IS_TAG = ${IS_TAG}"
+
                     }          
                 }
             steps {
