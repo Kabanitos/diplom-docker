@@ -4,6 +4,7 @@ pipeline {
         IMAGE_NAME = "cabanitos/mynginx"
         KUBECONFIGID = "kubeconfig"
         DOCKERID = "dockerhub-cabanitos"
+        GIT_TAG = null         
 
 
     }
