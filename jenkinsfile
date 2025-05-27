@@ -3,6 +3,7 @@ pipeline {
     environment {
         IMAGE_NAME = "cabanitos/mynginx"
         KUBECONFIGID = "kubeconfig"
+        DOCKERID = "dockerhub-cabanitos"
 
     }
     stages {
@@ -42,7 +43,7 @@ pipeline {
     
         stage('Push to Docker Registry') {
             steps {
-                withCredentials([usernamePassword( credentialsId: 'dockerhub-cabanitos', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                withCredentials([usernamePassword( credentialsId: '${env.DOCKERID}', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh """
                         echo "GIT_TAG = ${GIT_TAG}"
                         echo "IS_TAG = ${IS_TAG}"
