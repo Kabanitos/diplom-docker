@@ -76,7 +76,6 @@ pipeline {
                     env.GIT_TAG.toBoolean()
                     }          
                 }
-            }
             steps {
                 withCredentials([file(credentialsId: "${env.KUBECONFIGID}", variable: 'KUBECONFIGID')]) {
                     sh """
@@ -86,6 +85,7 @@ pipeline {
                     """
                 }
             }
+           
         }
     }
 }
