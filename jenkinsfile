@@ -4,7 +4,7 @@ pipeline {
         IMAGE_NAME = "cabanitos/mynginx"
         KUBECONFIGID = "kubeconfig"
         DOCKERID = "dockerhub-cabanitos"
-        GIT_TAG = null         
+                 
 
 
     }
@@ -20,15 +20,15 @@ pipeline {
           steps {
              script {
                   try {
-                        GIT_TAG = sh(script: "git describe --tags --exact-match", returnStdout: true).trim()
-                        IS_TAG = "true"
+                        env.GIT_TAG = sh(script: "git describe --tags --exact-match", returnStdout: true).trim()
+                        env.IS_TAG = "true"
                     } 
                         catch (Exception e) {
-                        GIT_TAG = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
-                        IS_TAG = "false"
+                        env.GIT_TAG = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+                        env.IS_TAG = "false"
                     }
-                    echo "GIT_TAG = ${GIT_TAG}"
-                    echo "IS_TAG = ${IS_TAG}"
+                    echo "GIT_TAG = ${env.GIT_TAG}"
+                    echo "IS_TAG = ${env.IS_TAG}"
                 }
             }
         }
@@ -73,9 +73,7 @@ pipeline {
         // }
         stage('Deploy to Kubernetes') {
             when {
-                environment name: 'IS_TAG', value: "true"
-                echo "GIT_TAG = ${GIT_TAG}"
-                echo "IS_TAG = ${IS_TAG}"
+                environment name: 'env.IS_TAG', value: 'true'
 
                 }          
                 
