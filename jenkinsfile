@@ -70,9 +70,9 @@ pipeline {
         //     }
         // }
         stage('Deploy to Kubernetes') {
-            when {
-                environment name: 'IS_TAG', value: 'true'
-            }
+            // when {
+            //     environment name: 'IS_TAG', value: 'true'
+            // }
             steps {
                 withCredentials([file(credentialsId: "${env.KUBECONFIGID}", variable: 'KUBECONFIGID')]) {
                     sh """
