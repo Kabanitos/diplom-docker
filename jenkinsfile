@@ -54,6 +54,8 @@ pipeline {
         }
 
         stage('Deploy to Kubernetes') {
+                    echo "GIT_TAG = ${GIT_TAG}"
+                    echo "IS_TAG = ${IS_TAG}"
             when {
                 environment name: 'IS_TAG', value: 'true'
             }
