@@ -73,7 +73,9 @@ pipeline {
         // }
         stage('Deploy to Kubernetes') {
             when {
-                environment name: 'env.IS_TAG', value: 'true'
+                expression {
+                    return env.IS_TAG == 'true'
+                }
 
                 }          
                 
