@@ -54,10 +54,9 @@ pipeline {
         }
 
         stage('Deploy to Kubernetes') {
-                    echo "GIT_TAG = ${GIT_TAG}"
-                    echo "IS_TAG = ${IS_TAG}"
+                
             when {
-                environment name: 'IS_TAG', value: 'true'
+                environment name: 'IS_TAG', value: "true"
             }
             steps {
                 withCredentials([file(credentialsId: "${env.KUBECONFIGID}", variable: 'KUBECONFIGID')]) {
