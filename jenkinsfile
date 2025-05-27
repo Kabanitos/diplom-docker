@@ -44,6 +44,8 @@ pipeline {
             steps {
                 withCredentials([usernamePassword( credentialsId: 'dockerhub-cabanitos', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh """
+                        echo "GIT_TAG = ${GIT_TAG}"
+                        echo "IS_TAG = ${IS_TAG}"
                         docker login -u \$USERNAME -p \$PASSWORD
                         docker push ${IMAGE_NAME}:${GIT_TAG}
                     """
