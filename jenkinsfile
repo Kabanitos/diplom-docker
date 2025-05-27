@@ -56,28 +56,12 @@ pipeline {
             }
         }
 
-        // stage('Deploy to Kubernetes') {
-                
-        //     when {
-        //         environment name: 'IS_TAG', value: "true"
-        //     }
-        //     steps {
-        //         withCredentials([file(credentialsId: "${env.KUBECONFIGID}", variable: 'KUBECONFIGID')]) {
-        //             sh """
-        //                 export KUBECONFIG=$KUBECONFIGID
-        //                 sed -i 's|image: cabanitos/mynginx:.*|image: cabanitos/mynginx:${GIT_TAG}|' deployment.yaml
-        //                 kubectl apply -f deployment.yaml
-        //             """
-        //         }
-        //     }
-        // }
         stage('Deploy to Kubernetes') {
             when {
                 expression {
                     return env.IS_TAG == 'true'
                 }
-
-                }          
+            }          
                 
             steps {
                 withCredentials([file(credentialsId: "${env.KUBECONFIGID}", variable: 'KUBECONFIGID')]) {
@@ -87,8 +71,7 @@ pipeline {
                         kubectl apply -f deployment.yaml
                     """
                 }
-            }
-           
+            }  
         }
     }
 }
