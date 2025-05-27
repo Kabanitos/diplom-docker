@@ -24,6 +24,8 @@ pipeline {
                         GIT_TAG = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
                         IS_TAG = "false"
                     }
+                    echo "GIT_TAG = ${GIT_TAG}"
+                    echo "IS_TAG = ${IS_TAG}"
                 }
             }
         }
